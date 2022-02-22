@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { RecoilRoot } from 'recoil';
+import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
+import styled from 'styled-components';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import { Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import PostList from './pages/PostList';
+import Write from './pages/Write'
+
+const GlobalStyle = createGlobalStyle`
+  ${reset}
+  html, body {
+    height: 100%;
+    background-color: #eee;
+		box-sizing: border-box;
+  }
+`;
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<RecoilRoot>
+			<GlobalStyle />
+			<Header />
+			<Routes>
+				<Route path='/' element={<PostList />} />
+				<Route path='/login' element={<Login />} />
+				<Route path='/signup' element={<Signup />} />
+				<Route path='/write' element={<Write />} />
+			</Routes>
+		</RecoilRoot>
+	);
 }
 
 export default App;
+
+const StyledContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
