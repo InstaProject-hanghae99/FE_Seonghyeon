@@ -5,10 +5,7 @@ import { userState } from '../store/atom';
 import styled from 'styled-components';
 import Input from '../elements/Input';
 import Button from '../elements/Button';
-import UploadImage from '../components/UploadImage'
-import Upload from '../components/Upload'
-
-
+import Image from '../components/Image'
 
 const Write = () => {
 	const navigate = useNavigate();
@@ -45,7 +42,6 @@ const Write = () => {
 		navigate('/');
 	};
 
-
 	return (
 		<Container>
 			<PageTitle>게시글 작성</PageTitle>
@@ -54,13 +50,13 @@ const Write = () => {
 				<option value='right'>right</option>
 				<option value='bottom'>bottom</option>
 			</StyledSelect>
-			<UploadImage />
 			<Input
 				type='text'
 				name='image_url'
 				label='이미지 URL'
 				_onChange={onChange}
 			/>
+			<Image />
 			<Input type='text' name='content' label='내용' _onChange={onChange} />
 			<Button fullwidth _onClick={postWrite}>
 				게시글 작성
