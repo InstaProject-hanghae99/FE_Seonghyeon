@@ -105,7 +105,8 @@ const StyledContents = styled.p`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border: 1px solid #ccc
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 `;
 
 const PostContents = styled.div`

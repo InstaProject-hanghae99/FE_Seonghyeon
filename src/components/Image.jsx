@@ -161,3 +161,4 @@ const WriteWrapper = styled.div`
 `;
 
 export default WritePage;
+
