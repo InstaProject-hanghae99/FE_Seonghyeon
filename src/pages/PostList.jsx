@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import Post from '../components/Post';
-import { postState } from '../store/atom';
+import { postState, userState } from '../store/atom';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 const Main = () => {
 	const navigate = useNavigate()
 	const [post, setPost] = useRecoilState(postState);
+	const [user, setUser] = useRecoilState(userState)
+
 
 	const fetchData = async () => {
 		const storageData = localStorage.getItem('post');
@@ -28,7 +30,7 @@ const Main = () => {
 
 	return (
 		<>
-			<PostButton onClick={write}>+</PostButton>
+			{user.isLogin ? <PostButton onClick={write}>+</PostButton> : null}
 			{post ? post.map((p, index) => <Post key={index} {...p} />) : null}
 		</>
 	);

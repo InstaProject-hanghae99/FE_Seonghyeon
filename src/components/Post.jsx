@@ -47,7 +47,14 @@ const Post = props => {
 			<PostHeader>
 				<p>{props.nickname}</p>
 			</PostHeader>
-			<StyledImage src={props.image_url} alt='포스트 이미지' />
+			<PostBody layout={props.layout}>
+				<StyledContents layout={props.layout}>{props.content}</StyledContents>
+				<StyledImage
+					src={props.image_url}
+					alt='포스트 이미지'
+					layout={props.layout}
+				/>
+			</PostBody>
 			<PostContents>
 				{props.islike ? (
 					<StyledHeartFill onClick={unlike} />
@@ -55,8 +62,12 @@ const Post = props => {
 					<StyledHeart onClick={like} />
 				)}
 				<p>{props.likeCount}명이 좋아합니다.</p>
-				<p>{props.nickname} {props.content}</p>
-				<PostTime>{parseInt((Date.now() - props.created_At) / 3600000)}시간 전</PostTime>
+				<p>
+					{props.nickname} {props.content}
+				</p>
+				<PostTime>
+					{parseInt((Date.now() - props.created_At) / 3600000)}시간 전
+				</PostTime>
 			</PostContents>
 		</StyledPost>
 	);
@@ -73,20 +84,36 @@ const StyledPost = styled.div`
 const PostHeader = styled.div`
 	display: flex;
 	align-items: center;
-  height: 50px;
-  padding: 0 20px;
+	height: 50px;
+	padding: 0 20px;
+`;
+
+const PostBody = styled.div`
+	width: 100%;
+	display: ${props => (props.layout === 'bottom' ? 'block' : 'flex')};
+	flex-direction: ${props =>
+		props.layout === 'right' ? 'row' : 'row-reverse'};
 `;
 
 const StyledImage = styled.img`
-	width: 100%;
+	width: ${props => (props.layout === 'bottom' ? '500px' : '250px')};
+`;
+
+const StyledContents = styled.p`
+	width: ${props => (props.layout === 'bottom' ? '100%' : '50%')};
+	${props => (props.layout === 'bottom' ? `height: 50px` : null)};
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #ccc
 `;
 
 const PostContents = styled.div`
 	padding: 15px;
-  font-size: 13px;
-  p {
-    margin-top: 5px;
-  }
+	font-size: 13px;
+	p {
+		margin-top: 5px;
+	}
 `;
 
 const StyledHeart = styled(Heart)`
@@ -101,8 +128,8 @@ const StyledHeartFill = styled(HeartFill)`
 `;
 
 const PostTime = styled.p`
-  color: #aaa;
-  font-size: 10px
-`
+	color: #aaa;
+	font-size: 10px;
+`;
 
 export default Post;

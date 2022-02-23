@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import AWS from 'aws-sdk';
 
-const WritePage = () => {
+const WritePage = props => {
 	const [progress, setProgress] = useState(0);
 	const [imageSrc, setImageSrc] = useState('');
 	const [selectedFile, setSelectedFile] = useState(null);
-	const [imgUrl, setImgUrl] = useState('s3://my-magazine-shine7329/upload');
 
 	// AWS S3 연결을 위한 변수 할당
 	const S3_BUCKET = 'my-magazine-shine7329';
@@ -67,27 +66,26 @@ const WritePage = () => {
 			.putObject(params)
 			.on('httpUploadProgress', (evt, res) => {
 				setProgress(Math.round((evt.loaded / evt.total) * 100));
-				const imgPath = res.request.httpRequest.path;
-				setImgUrl(imgUrl + imgPath);
+				props.setUrl(
+					'https://my-magazine-shine7329.s3.ap-northeast-2.amazonaws.com' +
+						res.request.httpRequest.path
+				);
 			})
 			.send(err => {
 				if (err) console.log(err);
 			});
 	};
-	console.log(imgUrl);
 
 	return (
 		<>
-			<h2>작성하기</h2>
 			<WriteWrapper>
 				<div className='upload-btn'>
-					<label htmlFor='inputFile'>업로드</label>
+					<label htmlFor='inputFile'>사진선택</label>
 					<input id='inputFile' type='file' onChange={handleFileInput} />
 				</div>
 				<div className='img-box'>
 					{imageSrc && <img src={imageSrc} alt='preview-img' />}
 				</div>
-				<textarea name='content' id='content' cols='30' rows='10'></textarea>
 				{progress ? `${progress}% 완료` : '업로드 해주세요'}
 				<button
 					id='writeBtn'
@@ -97,7 +95,7 @@ const WritePage = () => {
 						uploadFile(selectedFile);
 					}}
 				>
-					작성하기
+					업로드
 				</button>
 			</WriteWrapper>
 		</>
@@ -120,7 +118,7 @@ const WriteWrapper = styled.div`
 			font-size: inherit;
 			line-height: normal;
 			vertical-align: middle;
-			background-color: #000;
+			background-color: #999;
 			cursor: pointer;
 			border-radius: 5px;
 			border-radius: 0.25em;
@@ -141,7 +139,7 @@ const WriteWrapper = styled.div`
 		justify-content: center;
 		align-items: center;
 		width: 50%;
-		border: 1px solid #000;
+		/* border: 1px solid #000; */
 		img {
 			width: 100%;
 		}
@@ -150,11 +148,12 @@ const WriteWrapper = styled.div`
 		resize: none;
 	}
 	.write-btn {
-		width: 30%;
+		width: 300px;
 		margin: 20px 30px;
 		padding: 15px 10px;
 		text-align: center;
-		background-color: #000;
+		background-color: #999;
+		border: none;
 		color: #fff;
 		border-radius: 5px;
 		font-size: 1.6rem;

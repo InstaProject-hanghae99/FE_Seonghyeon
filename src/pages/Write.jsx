@@ -10,21 +10,29 @@ import Image from '../components/Image'
 const Write = () => {
 	const navigate = useNavigate();
 	const user = useRecoilValue(userState);
+	const [url, setUrl] = useState('')
 	const [inputs, setInputs] = useState({
-		image_url: '',
 		content: '',
+		layout: 'left',
 	});
 
 	const onChange = e => {
 		const { name, value } = e.target;
 		setInputs({ ...inputs, [name]: value });
+		setTimeout(()=> {
+			console.log(url)
+		}, 1000)
 	};
 
 	const postWrite = () => {
-		if (!user.isLogin) {
+		if (!user.isLogin || !user.nickname) {
 			alert('로그인 한 사람만 글쓰기 가능합니다.');
 			navigate('/login');
 			return;
+		}
+		if (!url) {
+			alert('이미지 업로드를 눌러주세요.');
+			return
 		}
 		let prev = localStorage.getItem('post');
 		let prevArr = [];
@@ -37,7 +45,9 @@ const Write = () => {
 			likeCount: 0,
 			nickname: user.nickname,
 			islike: false,
+			image_url: url,
 		});
+		console.log(prevArr)
 		localStorage.setItem('post', JSON.stringify(prevArr));
 		navigate('/');
 	};
@@ -45,18 +55,12 @@ const Write = () => {
 	return (
 		<Container>
 			<PageTitle>게시글 작성</PageTitle>
-			<StyledSelect>
+			<StyledSelect onChange={onChange} name = 'layout'>
 				<option value='left'>left</option>
 				<option value='right'>right</option>
 				<option value='bottom'>bottom</option>
 			</StyledSelect>
-			<Input
-				type='text'
-				name='image_url'
-				label='이미지 URL'
-				_onChange={onChange}
-			/>
-			<Image />
+			<Image setUrl={setUrl} />
 			<Input type='text' name='content' label='내용' _onChange={onChange} />
 			<Button fullwidth _onClick={postWrite}>
 				게시글 작성
